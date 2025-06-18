@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Graduation to Xiang Gangy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <link rel="stylesheet" href="/css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <link href="/images/favicon.svg" rel="icon" type="image/svg+xml"/>
+
+  <script src="/js/main.js" defer></script>
+  <script src="/js/modules/darkMode.js"></script>
+  <script src="/js/modules/ui.js"></script>
+  <script src="/js/modules/navigation.js"></script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Graduation to Xiang Gang</h1>
+    </header>
+
+    <nav class="sticky">
+      <a href="/">Home</a>
+      <a href="/research.html">Research</a>
+      <a href="/newsletter.html">Back to Newsletter</a>
+      <button id="night-toggle" class="nav-toggle" title="Toggle dark mode">🌓</button>
+    </nav>
+
+    <div class="featured-image">
+      <img loading="lazy" src="/images/14F4A43B-4702-4F08-BDF2-C5F8B3C2736A_1_102_o.jpeg"/>
+    </div>
+
+    <main>
+      <div class="newsletter-card">
+        <p>On Sunday, I graduated with my master’s degree, bade a tearful goodbye to my friends, dropped my parents off at the airport, packed up my room, and rushed to catch a midnight flight to Hong Kong.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/B57B19B1-0E4C-4E40-B815-AB4BF6598CF1_1_102_o.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/304709AD-72A0-45B4-8457-86C38D238F84_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/BFE72DE4-5870-4A10-BBAA-A3E37A93EF27.jpeg"/></div>
+        </div>
+
+        <p>I’m currently on a bus to Shenzhen, and the primary emotion I’m feeling right now is eepy. But I’m also overflowing with gratitude and excitement for what’s to come.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/02B325FD-3612-4D55-9A0B-B20231508A5E_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/4AD97ED7-5B79-445D-A12F-064272B60A05_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/2C8AFB15-1742-4F27-AD18-6447A31A8900_1_105_c.jpeg"/></div>
+        </div>
+
+        <p>I know things that freshman me wanted to know, and far more things have come to me that I was not wise enough to even know I wanted to know.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/11B13A01-D63C-40AB-B9B0-25CE1BADDDE2_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/4030B488-0F6C-413D-88A3-3B451CBEC9E1_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/42C4172D-AE3A-4B72-81F9-074C130B4629_1_105_c.jpeg"/></div>
+        </div>
+
+        <p>Things feel kind of right, and I'm ready to go. I’m more focused, appreciative, and sure of myself than I’ve ever been before.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/8EC95AD5-C463-49A8-9CC3-4ED72B1D5332_1_102_o.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/00ED1FFF-2598-4950-8967-94FC9862276A_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/17D1E9BA-D2BA-4707-8D75-14C3A635FD40_4_5005_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/84E8FADD-FAD1-4EA1-BCD4-C81BA6EFC076_1_105_c.jpeg"/></div>
+        </div>
+
+        <p>I’ve faced challenges and heartbreaks, disappointments and consternations.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/971504F1-8B0C-4481-A2D3-442CE97ABD38_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/C9FD8E13-BF85-4992-9D3A-A97017B1A231_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/CC0F80B3-774F-4AF7-9DC1-0CA9B93E4504_1_105_c.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/D103ACF7-218F-4592-9BC2-D1E2652CB31F_1_105_c.jpeg"/></div>
+        </div>
+
+        <p>I can choose where I land and move forward on new terms.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/E35C77EC-1C04-4073-9DA3-E581CA6487E1.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/E938B46B-3BE7-4218-A43F-8598F96284A3_1_105_c.jpeg"/></div>
+        </div>
+
+        <p>At Stanford, I’ve found people who see me clearly. I’ve developed my voice and pursued my curiosities.</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/F35EE7AE-DB97-4138-9FD5-F0DDA7BFB0A2_1_102_o.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/FE646544-5C7D-430C-A27F-079665E5786C_1_105_c.jpeg"/></div>
+        </div>
+
+        <p>My time in China begins with a research trip alongside my academic advisor, Scott Rozelle...</p>
+
+        <div class="image-grid">
+          <div class="image-container"><img loading="lazy" src="/images/2E79669E-BC19-4EF1-B0BA-28637A98535B_1_102_o.jpeg"/></div>
+          <div class="image-container"><img loading="lazy" src="/images/2233333E-A4AF-4787-9B8E-5EFAF224F132_1_102_o.jpeg"/></div>
+        </div>
+
+        <p>We landed in Hong Kong...</p>
+
+        <div class="image-container">
+          <img loading="lazy" src="/images/7A1D6FC8-5916-4E37-B47F-7E6485E7FA1A_1_102_o.jpeg"/>
+        </div>
+
+        <p>Hong Kong University...</p>
+
+        <div class="image-container">
+          <img loading="lazy" src="/images/C008C5D5-BFF3-4A93-9CC5-D7A4A0D65147_1_102_o.jpeg"/>
+        </div>
+
+        <p>Minister of Treasury and city development...</p>
+
+        <div class="image-container">
+          <img loading="lazy" src="/images/E852042D-C729-4A96-ABB6-90E80177377B_1_102_o.jpeg"/>
+        </div>
+
+        <p>We settled for 7/11 sandwiches...</p>
+
+        <div class="image-container">
+          <img loading="lazy" src="/images/80FCEC77-DFD1-41B1-AEA7-A8DB8CE9C7EA_1_102_o.jpeg"/>
+        </div>
+
+        <p>Thanks for reading. Until next time, Michael</p>
+      </div>
+    </main>
+
+    <footer>
+      <div class="icon-group">
+        <a href="https://github.com/malisky" target="_blank">
+          <img src="/images/github-icon.svg" />
+        </a>
+        <a href="https://www.linkedin.com/in/michaelalisky" target="_blank">
+          <img src="/images/linkedin-icon.svg" />
+        </a>
+        <a href="https://scholar.google.com/citations?user=b4EtdL4AAAAJ&hl=en" target="_blank">
+          <img src="/images/scholar-icon.svg" />
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="theme-transition"></div>
+  <div class="scroll-top">↑</div>
+</body>
+</html>
