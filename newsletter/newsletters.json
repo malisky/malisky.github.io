@@ -188,17 +188,15 @@
     "location": { "lat": 43.2389, "lng": 76.8897 },
     "location_name": "Almaty, Kazakhstan",
     "countryGroup": "Kazakhstan"
+  },
+  {
+    "id": "graduation",
+    "title": "June 17: Graduation to Xiang Gang",
+    "date": "2025-06-17",
+    "image": "/images/B57B19B1-0E4C-4E40-B815-AB4BF6598CF1_1_102_o.jpeg",
+    "link": "/newsletter/graduation.html",
+    "location": { "lat": 22.2831, "lng": 114.1366 },
+    "location_name": "Pokfulam, Hong Kong",
+    "countryGroup": "Hong Kong"
   }
 ]
-
-{
-  "id": "graduation",
-  "title": "June 17: Graduation to Xiang Gang",
-  "date": "2025-06-17",
-  "image": "/images/B57B19B1-0E4C-4E40-B815-AB4BF6598CF1_1_102_o.jpeg",
-  "link": "/newsletter/graduation.html",
-  "location": { "lat": 22.2831, "lng": 114.1366 },
-  "location_name": "Pokfulam, Hong Kong",
-  "countryGroup": "Hong Kong"
-}
-
