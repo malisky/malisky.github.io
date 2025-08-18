@@ -10,7 +10,8 @@
     "convert-one": "node newsletter-to-email.js",
     "test": "node newsletter-to-email.js baden.html",
     "optimize": "node optimize-images.js optimize",
-    "restore-images": "node optimize-images.js restore"
+    "restore-images": "node optimize-images.js restore",
+    "rss": "node scripts/generate-rss.js"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.12",
