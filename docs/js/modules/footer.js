@@ -23,6 +23,9 @@ if (document.querySelector('footer') || document.querySelector('.theme-transitio
       <a href="https://scholar.google.com/citations?user=b4EtdL4AAAAJ&hl=en" target="_blank">
         <img src="${iconPath}scholar-icon.svg" alt="Google Scholar" />
       </a>
+      <a href="${isNewsletterPage ? '../feed.xml' : 'feed.xml'}" target="_blank" title="RSS Feed" aria-label="RSS Feed">
+        <img src="${iconPath}rss-icon.svg" alt="RSS" />
+      </a>
     </div>
   `;
 
