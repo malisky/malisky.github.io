@@ -12,15 +12,32 @@ class EmailSender {
 
   createGmailTransporter() {
     const gmailUser = process.env.GMAIL_USER;
-    const gmailPassword = process.env.GMAIL_APP_PASSWORD;
+    let gmailPassword = process.env.GMAIL_APP_PASSWORD;
     if (!gmailUser || !gmailPassword) throw new Error('Missing Gmail credentials in .env');
 
+    // Normalize app password in case it was pasted with spaces
+    gmailPassword = gmailPassword.replace(/\s+/g, '');
+
     return nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
       auth: { user: gmailUser, pass: gmailPassword },
-      connectionTimeout: 10000,
-      greetingTimeout: 10000,
-      socketTimeout: 10000
+
+      pool: true,
+      maxConnections: 1,
+      maxMessages: Infinity,
+
+      rateDelta: 1000,
+      rateLimit: 20,
+
+      connectionTimeout: 60000,
+      greetingTimeout: 30000,
+      socketTimeout: 60000,
+
+      logger: true,
+      debug: true,
+      tls: { minVersion: 'TLSv1.2', servername: 'smtp.gmail.com' }
     });
   }
 
@@ -43,9 +60,16 @@ class EmailSender {
   prepareAttachments(imageManifest) {
     return imageManifest.map(({ src, cid }) => {
       const cleanPath = src.replace(/^.*images-optimized\//, '');
+      const filePath = path.resolve('docs/images-optimized', cleanPath);
+      
+      // Fail fast on missing attachments
+      if (!fs.existsSync(filePath)) {
+        throw new Error(`Missing attachment: ${filePath}`);
+      }
+      
       return {
         filename: path.basename(cleanPath),
-        path: path.resolve('docs/images-optimized', cleanPath),
+        path: filePath,
         cid
       };
     });
@@ -79,8 +103,19 @@ class EmailSender {
   }
 
   async sendToOne(transporter, recipient, emailFile, subject) {
+    // Verify connection before sending
+    await transporter.verify();
+    console.log('✅ SMTP connection verified');
+    
     const html = this.loadEmailContent(emailFile);
     const attachments = this.prepareAttachments(this.loadImageManifest(emailFile));
+    
+    // Size sanity check
+    const approxSize = attachments.reduce((s, a) => s + (fs.existsSync(a.path) ? fs.statSync(a.path).size : 0), 0);
+    if (approxSize > 20 * 1024 * 1024) {
+      console.warn(`⚠️ Email size is ${(approxSize / 1024 / 1024).toFixed(1)}MB. Consider fewer/lighter images.`);
+    }
+    
     const result = await this.send(transporter, {
       to: recipient,
       subject,
