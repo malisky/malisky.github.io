@@ -188,5 +188,15 @@
     "location": { "lat": 34.500, "lng": 112.909 },
     "location_name": "Shaolin Temple, Henan, China",
     "countryGroup": "China"
+  },
+  {
+    "id": "ningxia",
+    "title": "October 8, 2025: Golden Week in Ningxia",
+    "date": "2025-10-08",
+    "image": "/images-optimized/ningxia/xumishan-buddha.webp",
+    "link": "/newsletter/ningxia.html",
+    "location": { "lat": 36.28062, "lng": 105.98154 },
+    "location_name": "Xumishan Grottoes, Ningxia, China",
+    "countryGroup": "China"
   }
 ]
