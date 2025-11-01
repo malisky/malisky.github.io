@@ -198,5 +198,15 @@
     "location": { "lat": 36.28062, "lng": 105.98154 },
     "location_name": "Xumishan Grottoes, Ningxia, China",
     "countryGroup": "China"
+  },
+  {
+    "id": "emeishan",
+    "title": "October 30, 2025: Mount Emei",
+    "date": "2025-10-30",
+    "image": "/images-optimized/emeishan/emeishan-cover.webp",
+    "link": "/newsletter/emeishan.html",
+    "location": { "lat": 29.5269, "lng": 103.3364 },
+    "location_name": "Mount Emei (Emeishan), Sichuan, China",
+    "countryGroup": "China"
   }
 ]

@@ -7,191 +7,175 @@ require('dotenv').config();
 
 const app = express();
 
-// Function to find an available port
-function findAvailablePort(startPort) {
-  return new Promise((resolve, reject) => {
+// Make client IPs reliable behind VPN/proxies (Heroku/NGINX/etc.)
+app.set('trust proxy', 1);
+
+// === Helpers ===
+function fileExists(p) {
+  try { return fs.existsSync(p); } catch { return false; }
+}
+
+// Find an open port, binding to a specific host to avoid IPv6-only binds
+function findAvailablePort(startPort, host = '127.0.0.1') {
+  return new Promise((resolve) => {
     const server = net.createServer();
-    server.listen(startPort, () => {
-      const { port } = server.address();
-      server.close(() => resolve(port));
+    server.once('error', () => {
+      // Try next port
+      resolve(findAvailablePort(startPort + 1, host));
     });
-    server.on('error', () => {
-      resolve(findAvailablePort(startPort + 1));
+    server.listen({ port: startPort, host }, () => {
+      const { port } = server.address();
+      server.close(() => resolve({ port, host }));
     });
   });
 }
 
-// Use the function to get an available port
-findAvailablePort(8080).then(port => {
-  const PORT = port;
-  
-  // Security middleware
-  app.use(express.json({ limit: '10kb' })); // Limit JSON payload size
-  app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+// CORS: allow a small, explicit allowlist and echo matches
+const ALLOW_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:8081')
+  .split(',') // support comma-separated list
+  .map(s => s.trim());
 
-  // CORS configuration - restrict to specific origins in production
-  const corsOptions = {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:8081',
-    credentials: true,
-    optionsSuccessStatus: 200
-  };
+const corsOptions = {
+  origin(origin, cb) {
+    // Allow same-origin/non-browser tools (no Origin header)
+    if (!origin) return cb(null, true);
+    const allowed = ALLOW_ORIGINS.includes(origin);
+    return cb(null, allowed);
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+// === Bootstrap ===
+findAvailablePort(8080, process.env.BIND_HOST || '127.0.0.1').then(({ port, host }) => {
+  const PORT = port;
+
+  app.use(express.json({ limit: '10kb' }));
+  app.use(express.urlencoded({ extended: true, limit: '10kb' }));
   app.use(cors(corsOptions));
 
-  // Serve static files with proper MIME types
   const staticDir = path.join(__dirname, '..', 'docs');
+  const indexHtml = path.join(staticDir, 'index.html');
+
+  if (!fileExists(indexHtml)) {
+    console.error('❌ index.html not found at:', indexHtml);
+  } else {
+    console.log('✅ index.html found at:', indexHtml);
+  }
+
   app.use(express.static(staticDir, {
-    setHeaders: (res, path) => {
-      if (path.endsWith('.js')) {
+    setHeaders: (res, filePath) => {
+      // Let Express set most types; only tweak if you must.
+      if (filePath.endsWith('.js')) {
         res.setHeader('Content-Type', 'text/javascript');
       }
     }
   }));
 
-  // Newsletter database file path
   const SUBSCRIBERS_FILE = path.join(__dirname, 'subscribers.json');
 
-  // Rate limiting for newsletter signup
+  // Rate limit for newsletter signup
   const signupAttempts = new Map();
-  const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+  const RATE_LIMIT_WINDOW = 15 * 60 * 1000;
   const MAX_ATTEMPTS = 3;
 
   function checkRateLimit(ip) {
     const now = Date.now();
     const attempts = signupAttempts.get(ip) || [];
-    
-    // Remove old attempts
-    const recentAttempts = attempts.filter(time => now - time < RATE_LIMIT_WINDOW);
-    
-    if (recentAttempts.length >= MAX_ATTEMPTS) {
-      return false;
-    }
-    
-    recentAttempts.push(now);
-    signupAttempts.set(ip, recentAttempts);
+    const recent = attempts.filter(t => now - t < RATE_LIMIT_WINDOW);
+    if (recent.length >= MAX_ATTEMPTS) return false;
+    recent.push(now);
+    signupAttempts.set(ip, recent);
     return true;
   }
 
-  // Helper function to read subscribers from file
   function readSubscribers() {
     try {
       const data = fs.readFileSync(SUBSCRIBERS_FILE, 'utf8');
       return JSON.parse(data);
-    } catch (error) {
-      // If file doesn't exist or is invalid, return default structure
+    } catch {
       return { subscribers: [], lastUpdated: new Date().toISOString() };
     }
   }
 
-  // Helper function to write subscribers to file
   function writeSubscribers(data) {
     try {
       data.lastUpdated = new Date().toISOString();
       fs.writeFileSync(SUBSCRIBERS_FILE, JSON.stringify(data, null, 2));
       return true;
     } catch (error) {
-      console.error('Error writing to subscribers file:', error);
+      console.error('Error writing subscribers file at', SUBSCRIBERS_FILE, error);
       return false;
     }
   }
 
-  // Enhanced email validation
   function validateEmail(email) {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email) && email.length <= 254;
   }
-
-  // Enhanced name validation
   function validateName(name) {
     return name && typeof name === 'string' && name.trim().length > 0 && name.length <= 100;
   }
 
-  // API endpoint to handle newsletter signup
   app.post('/api/newsletter-signup', (req, res) => {
-    const clientIP = req.ip || req.connection.remoteAddress;
-    
-    // Rate limiting
+    const clientIP = req.ip || req.connection?.remoteAddress || 'unknown';
+
     if (!checkRateLimit(clientIP)) {
-      return res.status(429).json({ 
-        success: false, 
-        message: 'Too many signup attempts. Please try again later.' 
-      });
+      return res.status(429).json({ success: false, message: 'Too many signup attempts. Please try again later.' });
     }
-    
-    const { email, name } = req.body;
-    
-    // Enhanced validation
+
+    const { email, name } = req.body || {};
     if (!email || !validateEmail(email)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide a valid email address' 
-      });
+      return res.status(400).json({ success: false, message: 'Please provide a valid email address' });
     }
-    
     if (name && !validateName(name)) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Please provide a valid name (max 100 characters)' 
-      });
+      return res.status(400).json({ success: false, message: 'Please provide a valid name (max 100 characters)' });
     }
-    
+
     try {
       const data = readSubscribers();
-      
-      // Check if email already exists
-      const existingSubscriber = data.subscribers.find(sub => sub.email.toLowerCase() === email.toLowerCase());
-      if (existingSubscriber) {
-        return res.status(409).json({ 
-          success: false, 
-          message: 'This email is already subscribed to the newsletter' 
-        });
+      const exists = data.subscribers.find(sub => sub.email.toLowerCase() === email.toLowerCase());
+      if (exists) {
+        return res.status(409).json({ success: false, message: 'This email is already subscribed to the newsletter' });
       }
-      
-      // Add new subscriber
       const newSubscriber = {
         email: email.toLowerCase().trim(),
         name: name ? name.trim() : email.split('@')[0]
       };
       data.subscribers.push(newSubscriber);
-      
-      // Save to file
+
       if (writeSubscribers(data)) {
         console.log(`New newsletter subscriber: ${newSubscriber.email} (${newSubscriber.name})`);
-        res.json({ 
-          success: true, 
-          message: 'Successfully subscribed to the newsletter!' 
-        });
+        return res.json({ success: true, message: 'Successfully subscribed to the newsletter!' });
       } else {
-        res.status(500).json({ 
-          success: false, 
-          message: 'Failed to save subscription. Please try again.' 
-        });
+        return res.status(500).json({ success: false, message: 'Failed to save subscription. Please try again.' });
       }
-    } catch (error) {
-      console.error('Error processing newsletter signup:', error);
-      res.status(500).json({ 
-        success: false, 
-        message: 'Server error. Please try again later.' 
-      });
+    } catch (err) {
+      console.error('Error processing newsletter signup:', err);
+      return res.status(500).json({ success: false, message: 'Server error. Please try again later.' });
     }
   });
 
-  // Serve index.html for the root route
   app.get('/', (req, res) => {
-    res.sendFile(path.join(staticDir, 'index.html'));
+    res.sendFile(indexHtml, (err) => {
+      if (err) {
+        console.error('sendFile error for /:', err);
+        res.status(err.statusCode || 500).end();
+      }
+    });
   });
 
+  // SPA fallback AFTER API routes
+  app.get('*', (req, res) => res.sendFile(indexHtml));
 
-
-  // Handle all other routes by serving the corresponding HTML files
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(staticDir, 'index.html'));
-  });
-
-  app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+  app.listen(PORT, host, () => {
+    console.log(`🚀 Server running at http://${host}:${PORT}`);
     console.log(`📁 Serving files from: ${staticDir}`);
-    console.log(`🌐 Open your browser and navigate to: http://localhost:${PORT}`);
-    console.log(`📧 Newsletter signup API available at: http://localhost:${PORT}/api/newsletter-signup`);
+    console.log(`🌐 Open: http://${host}:${PORT}`);
+    console.log(`📧 Newsletter API: http://${host}:${PORT}/api/newsletter-signup`);
     console.log(`🔒 Rate limiting: ${MAX_ATTEMPTS} attempts per ${RATE_LIMIT_WINDOW/60000} minutes`);
+    console.log(`🔐 Allowed CORS origins:`, ALLOW_ORIGINS);
   });
-}); 
+}).catch(err => {
+  console.error('Failed to find an available port:', err);
+});

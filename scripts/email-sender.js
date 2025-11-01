@@ -18,26 +18,28 @@ class EmailSender {
     // Normalize app password in case it was pasted with spaces
     gmailPassword = gmailPassword.replace(/\s+/g, '');
 
+    // Try port 465 with SSL first, fallback to 587 with STARTTLS
+    const usePort465 = process.env.GMAIL_USE_465 === 'true';
+    
     return nodemailer.createTransport({
       host: 'smtp.gmail.com',
-      port: 587,
-      secure: false,
+      port: usePort465 ? 465 : 587,
+      secure: usePort465, // true for 465, false for 587 (uses STARTTLS)
       auth: { user: gmailUser, pass: gmailPassword },
 
-      pool: true,
-      maxConnections: 1,
-      maxMessages: Infinity,
-
-      rateDelta: 1000,
-      rateLimit: 20,
-
-      connectionTimeout: 60000,
+      // Disable connection pooling for more reliable sends
+      pool: false,
+      connectionTimeout: 60000, // Increased for large emails
       greetingTimeout: 30000,
-      socketTimeout: 60000,
+      socketTimeout: 120000,     // Increased for large emails with attachments
 
       logger: true,
       debug: true,
-      tls: { minVersion: 'TLSv1.2', servername: 'smtp.gmail.com' }
+      tls: { 
+        minVersion: 'TLSv1.2', 
+        servername: 'smtp.gmail.com',
+        rejectUnauthorized: true
+      }
     });
   }
 
