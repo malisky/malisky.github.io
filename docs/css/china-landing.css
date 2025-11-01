@@ -115,4 +115,17 @@ body.dark-mode a:active {
 /* Override navigation hover underline for China page */
 body.dark-mode nav a::after {
   background-color: #ffd600 !important;
+}
+
+/* China Timeline SVG */
+.china-timeline-svg {
+  pointer-events: none;
+}
+
+.china-timeline-line {
+  transition: stroke 0.3s ease;
+}
+
+body.dark-mode .china-timeline-line {
+  stroke: #ff5252;
 } 

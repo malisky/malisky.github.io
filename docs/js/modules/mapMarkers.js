@@ -1,6 +1,9 @@
 // Global array to store all markers
 let allMarkers = [];
 
+// Import timeline function
+import { initChinaTimelineOnMap } from './china-timeline.js';
+
 // Group markers by proximity
 function groupMarkersByProximity(markers, threshold = 0.5) {
   const groups = [];
@@ -151,8 +154,29 @@ function pointInMultiPolygon(point, multiPoly) {
 //     });
 // }
 
+let chinaPolygonLayer = null;
+let chinaPolygonObserver = null;
+
 export function addChinaPolygonOnHover(map) {
   console.log('[ChinaPolygon] Initializing polygon hover effect...');
+  
+  // Set up observer for dark mode changes (only once)
+  if (!chinaPolygonObserver) {
+    chinaPolygonObserver = new MutationObserver(() => {
+      if (chinaPolygonLayer) {
+        const newColor = document.body.classList.contains('dark-mode') ? '#ff5252' : '#d32f2f';
+        chinaPolygonLayer.setStyle({
+          color: newColor,
+          fillColor: newColor
+        });
+      }
+    });
+    chinaPolygonObserver.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  }
+  
   fetch('/cn.json')
     .then(res => {
       console.log('[ChinaPolygon] Fetched /cn.json:', res);
@@ -161,7 +185,6 @@ export function addChinaPolygonOnHover(map) {
     .then(geojson => {
       console.log('[ChinaPolygon] Loaded geojson:', geojson);
       let multiPoly = geojson.features[0].geometry.coordinates.map(swapLngLatToLatLng);
-      let chinaPolygonLayer = null;
       map.on('mousemove', function(e) {
         console.log('[ChinaPolygon] Mousemove at', e.latlng);
         const inside = pointInMultiPolygon([e.latlng.lat, e.latlng.lng], multiPoly);
@@ -169,21 +192,26 @@ export function addChinaPolygonOnHover(map) {
         if (inside) {
           if (!chinaPolygonLayer) {
             console.log('[ChinaPolygon] Adding polygon layer');
+            const strokeColor = document.body.classList.contains('dark-mode') ? '#ff5252' : '#d32f2f';
             chinaPolygonLayer = L.geoJSON(geojson, {
               style: {
-                color: '#d32f2f',
+                color: strokeColor,
                 weight: 3,
-                fillColor: '#d32f2f',
+                fillColor: strokeColor,
                 fillOpacity: 0.22
               }
             }).addTo(map);
             chinaPolygonLayer.bringToFront();
+            // Trigger China hover event
+            map.fire('china:hover');
           }
         } else {
           if (chinaPolygonLayer) {
             console.log('[ChinaPolygon] Removing polygon layer');
             map.removeLayer(chinaPolygonLayer);
             chinaPolygonLayer = null;
+            // Trigger China unhover event
+            map.fire('china:unhover');
           }
         }
       });
@@ -191,6 +219,10 @@ export function addChinaPolygonOnHover(map) {
     .catch(err => {
       console.error('[ChinaPolygon] Error loading polygon:', err);
     });
+}
+
+export function getChinaPolygonLayer() {
+  return chinaPolygonLayer;
 }
 
 export function addChinaMapClickHandler(map) {
@@ -388,6 +420,9 @@ export function initMapMarkers(map) {
       });
       
       fitAllMarkers(map);
+      
+      // Initialize China timeline after markers are created
+      initChinaTimelineOnMap(map, allMarkers);
     })
     .catch(err => {
       console.error("Failed to load newsletter markers:", err);
