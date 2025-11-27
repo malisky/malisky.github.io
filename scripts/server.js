@@ -14,11 +14,20 @@ function fileExists(p) {
 
 // Find an open port, binding to a specific host to avoid IPv6-only binds
 function findAvailablePort(startPort, host = '127.0.0.1') {
-  return new Promise((resolve) => {
+  if (startPort > 65535) {
+    return Promise.reject(new RangeError('No available ports below 65536'));
+  }
+
+  return new Promise((resolve, reject) => {
     const server = net.createServer();
-    server.once('error', () => {
-      // Try next port
-      resolve(findAvailablePort(startPort + 1, host));
+    server.once('error', (err) => {
+      server.close(() => {
+        if (err.code === 'EADDRINUSE') {
+          resolve(findAvailablePort(startPort + 1, host));
+        } else {
+          reject(err);
+        }
+      });
     });
     server.listen({ port: startPort, host }, () => {
       const { port } = server.address();

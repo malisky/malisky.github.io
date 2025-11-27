@@ -1,0 +1,54 @@
+[
+  {
+    "src": "../images-optimized/clayman/tianjin-cover.webp",
+    "cid": "img1@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/class-horizontal.webp",
+    "cid": "img2@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/class-horizontal2.webp",
+    "cid": "img3@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/class-vertical.webp",
+    "cid": "img4@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/Rui-horizontal.webp",
+    "cid": "img5@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/rui1.webp",
+    "cid": "img6@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/rui2.webp",
+    "cid": "img7@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/Statue1.webp",
+    "cid": "img8@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/Statue2.webp",
+    "cid": "img9@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/Statue3.webp",
+    "cid": "img10@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/Statue4.webp",
+    "cid": "img11@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/Tianjin-random.webp",
+    "cid": "img12@newsletter"
+  },
+  {
+    "src": "../images-optimized/clayman/swimmer.webp",
+    "cid": "img13@newsletter"
+  }
+]

@@ -3,6 +3,7 @@ require('dotenv').config();
 const fs = require('fs');
 const path = require('path');
 const nodemailer = require('nodemailer');
+const { SocksProxyAgent } = require('socks-proxy-agent');
 
 class EmailSender {
   constructor() {
@@ -11,36 +12,50 @@ class EmailSender {
   }
 
   createGmailTransporter() {
-    const gmailUser = process.env.GMAIL_USER;
-    let gmailPassword = process.env.GMAIL_APP_PASSWORD;
-    if (!gmailUser || !gmailPassword) throw new Error('Missing Gmail credentials in .env');
+    const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
+    let smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
 
-    // Normalize app password in case it was pasted with spaces
-    gmailPassword = gmailPassword.replace(/\s+/g, '');
+    if (!smtpUser || !smtpPass) {
+      throw new Error('Missing SMTP credentials. Set SMTP_USER/SMTP_PASS or GMAIL_USER/GMAIL_APP_PASSWORD.');
+    }
 
-    // Try port 465 with SSL first, fallback to 587 with STARTTLS
-    const usePort465 = process.env.GMAIL_USE_465 === 'true';
-    
-    return nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: usePort465 ? 465 : 587,
-      secure: usePort465, // true for 465, false for 587 (uses STARTTLS)
-      auth: { user: gmailUser, pass: gmailPassword },
+    smtpPass = smtpPass.replace(/\s+/g, '');
 
-      // Disable connection pooling for more reliable sends
+    const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
+    const smtpPort = Number(
+      process.env.SMTP_PORT ||
+      (process.env.GMAIL_USE_465 === 'true' ? 465 : 587)
+    );
+    const smtpSecure = process.env.SMTP_SECURE === 'true'
+      ? true
+      : smtpPort === 465;
+
+    const enableDebug = process.env.SMTP_DEBUG === 'true';
+    const socksProxyUrl = process.env.SMTP_SOCKS_PROXY;
+
+    const transportOptions = {
+      host: smtpHost,
+      port: smtpPort,
+      secure: smtpSecure,
+      auth: { user: smtpUser, pass: smtpPass },
       pool: false,
-      connectionTimeout: 60000, // Increased for large emails
+      connectionTimeout: 60000,
       greetingTimeout: 30000,
-      socketTimeout: 120000,     // Increased for large emails with attachments
-
-      logger: true,
-      debug: true,
-      tls: { 
-        minVersion: 'TLSv1.2', 
-        servername: 'smtp.gmail.com',
-        rejectUnauthorized: true
+      socketTimeout: 120000,
+      logger: enableDebug,
+      debug: enableDebug,
+      tls: {
+        minVersion: 'TLSv1.2',
+        servername: smtpHost,
+        rejectUnauthorized: process.env.SMTP_TLS_REJECT_UNAUTHORIZED !== 'false'
       }
-    });
+    };
+
+    if (socksProxyUrl) {
+      transportOptions.agent = new SocksProxyAgent(socksProxyUrl);
+    }
+
+    return nodemailer.createTransport(transportOptions);
   }
 
   loadSubscribers() {

@@ -208,5 +208,15 @@
     "location": { "lat": 29.5269, "lng": 103.3364 },
     "location_name": "Mount Emei (Emeishan), Sichuan, China",
     "countryGroup": "China"
+  },
+  {
+    "id": "clayman",
+    "title": "November 27, 2025: Clayman Zhang, and also Ruyi",
+    "date": "2025-11-27",
+    "image": "/images-optimized/clayman/tianjin-cover.webp",
+    "link": "/newsletter/clayman.html",
+    "location": { "lat": 39.14222, "lng": 117.17667 },
+    "location_name": "Ancient Culture Street, Tianjin, China",
+    "countryGroup": "China"
   }
 ]
