@@ -1,99 +1,76 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
-const cors = require('cors');
-const net = require('net');
-require('dotenv').config();
+// server.js
+const path = require("path");
+const fs = require("fs");
+const express = require("express");
+
+// Prevent terminal from waiting for stdin (stops the ":" stuck prompt in some terminals)
+if (process.stdin.isTTY) process.stdin.unref();
+
+const HOST = process.env.HOST || "0.0.0.0";
+const PORT = Number(process.env.PORT || 8080);
+
+// docs is next to the scripts folder (same repo root)
+const docsDir = process.env.STATIC_DIR
+  ? path.resolve(process.env.STATIC_DIR)
+  : path.join(path.dirname(__dirname), "docs");
+
+const indexHtml = path.join(docsDir, "index.html");
+
+if (!fs.existsSync(docsDir)) {
+  console.error("❌ docs directory not found:", docsDir);
+  process.exit(1);
+}
+if (!fs.existsSync(indexHtml)) {
+  console.error("❌ index.html not found:", indexHtml);
+  process.exit(1);
+}
 
 const app = express();
+app.use(express.static(docsDir));
 
-// === Helpers ===
-function fileExists(p) {
-  try { return fs.existsSync(p); } catch { return false; }
-}
+app.get("/", (req, res) => {
+  res.sendFile(indexHtml);
+});
 
-// Find an open port, binding to a specific host to avoid IPv6-only binds
-function findAvailablePort(startPort, host = '127.0.0.1') {
-  if (startPort > 65535) {
-    return Promise.reject(new RangeError('No available ports below 65536'));
-  }
+app.get(/.*/, (req, res) => {
+  res.sendFile(indexHtml);
+});
 
+function tryListen(port) {
   return new Promise((resolve, reject) => {
-    const server = net.createServer();
-    server.once('error', (err) => {
-      server.close(() => {
-        if (err.code === 'EADDRINUSE') {
-          resolve(findAvailablePort(startPort + 1, host));
-        } else {
-          reject(err);
-        }
-      });
+    const server = app.listen(port, HOST, () => {
+      console.log("3. ✅ Server running at http://localhost:" + port);
+      console.log("4. 📁 Serving from:", docsDir);
+      resolve(server);
     });
-    server.listen({ port: startPort, host }, () => {
-      const { port } = server.address();
-      server.close(() => resolve({ port, host }));
+    server.on("error", (err) => {
+      if (err.code === "EADDRINUSE") {
+        reject(new Error("EADDRINUSE"));
+      } else {
+        reject(err);
+      }
     });
   });
 }
 
-// CORS: allow a small, explicit allowlist and echo matches
-const ALLOW_ORIGINS = (process.env.CORS_ORIGIN || 'http://localhost:8081')
-  .split(',') // support comma-separated list
-  .map(s => s.trim());
+(async () => {
+  // Step 1: broadcast IP/host we're binding to
+  console.log("1. Binding to host:", HOST);
+  console.log("2. Trying port:", PORT);
 
-const corsOptions = {
-  origin(origin, cb) {
-    // Allow same-origin/non-browser tools (no Origin header)
-    if (!origin) return cb(null, true);
-    const allowed = ALLOW_ORIGINS.includes(origin);
-    return cb(null, allowed);
-  },
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-
-// === Bootstrap ===
-findAvailablePort(8080, process.env.BIND_HOST || '127.0.0.1').then(({ port, host }) => {
-  const PORT = port;
-
-  app.use(cors(corsOptions));
-
-  const staticDir = path.join(__dirname, '..', 'docs');
-  const indexHtml = path.join(staticDir, 'index.html');
-
-  if (!fileExists(indexHtml)) {
-    console.error('❌ index.html not found at:', indexHtml);
-  } else {
-    console.log('✅ index.html found at:', indexHtml);
-  }
-
-  app.use(express.static(staticDir, {
-    setHeaders: (res, filePath) => {
-      // Let Express set most types; only tweak if you must.
-      if (filePath.endsWith('.js')) {
-        res.setHeader('Content-Type', 'text/javascript');
+  for (let p = PORT; p < PORT + 5; p++) {
+    try {
+      await tryListen(p);
+      return;
+    } catch (err) {
+      if (err.message === "EADDRINUSE") {
+        console.warn("   Port " + p + " in use, trying " + (p + 1) + "...");
+      } else {
+        console.error("❌", err.message || err);
+        process.exit(1);
       }
     }
-  }));
-
-  app.get('/', (req, res) => {
-    res.sendFile(indexHtml, (err) => {
-      if (err) {
-        console.error('sendFile error for /:', err);
-        res.status(err.statusCode || 500).end();
-      }
-    });
-  });
-
-  // SPA fallback AFTER API routes
-  app.get('*', (req, res) => res.sendFile(indexHtml));
-
-  app.listen(PORT, host, () => {
-    console.log(`🚀 Server running at http://${host}:${PORT}`);
-    console.log(`📁 Serving files from: ${staticDir}`);
-    console.log(`🌐 Open: http://${host}:${PORT}`);
-    console.log(`🔐 Allowed CORS origins:`, ALLOW_ORIGINS);
-  });
-}).catch(err => {
-  console.error('Failed to find an available port:', err);
-});
+  }
+  console.error("❌ Could not bind to any port " + PORT + "-" + (PORT + 4));
+  process.exit(1);
+})();

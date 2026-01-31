@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
+const heicConvert = require('heic-convert');
 
 class ImageOptimizer {
   constructor() {
@@ -116,41 +117,50 @@ class ImageOptimizer {
 
   // Check if file is an image
   isImageFile(filename) {
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.heic'];
     const ext = path.extname(filename).toLowerCase();
     return imageExtensions.includes(ext);
   }
 
-  // Optimize a single image
+  // Optimize a single image (JPEG, PNG, GIF, WebP, or HEIC → WebP)
   async optimizeImage(imagePath, relativePath) {
     try {
       const stats = fs.statSync(imagePath);
       const originalSize = stats.size;
-      
+      const ext = path.extname(imagePath).toLowerCase();
+
       console.log(`📸 Processing: ${relativePath} (${(originalSize/1024).toFixed(0)}KB)`);
-      
+
       const settings = this.getOptimizationSettings(relativePath);
-      
-      // Create WebP version with proper rotation handling
-      const webpBuffer = await sharp(imagePath)
-        .rotate() // Auto-rotate based on EXIF orientation
-        .resize(settings.width, settings.height, { 
-          fit: 'inside', 
-          withoutEnlargement: true 
+
+      let input = imagePath;
+      if (ext === '.heic') {
+        const heicBuffer = fs.readFileSync(imagePath);
+        const jpegBuffer = await heicConvert({
+          buffer: heicBuffer,
+          format: 'JPEG'
+        });
+        input = jpegBuffer;
+      }
+
+      const webpBuffer = await sharp(input)
+        .rotate()
+        .resize(settings.width, settings.height, {
+          fit: 'inside',
+          withoutEnlargement: true
         })
         .webp({ quality: settings.quality })
         .toBuffer();
-      
-      // Save WebP version in the optimized folder
+
       const optimizedPath = path.join(this.optimizedDir, relativePath);
-      const webpPath = optimizedPath.replace(/\.(jpeg|jpg|png|gif|webp)$/i, '.webp');
+      const webpPath = optimizedPath.replace(/\.(jpeg|jpg|png|gif|webp|heic)$/i, '.webp');
       fs.writeFileSync(webpPath, webpBuffer);
-      
+
       const newSize = webpBuffer.length;
       const savings = ((originalSize - newSize) / originalSize * 100).toFixed(1);
-      
+
       console.log(`✅ Optimized: ${relativePath} - ${(originalSize/1024).toFixed(0)}KB → ${(newSize/1024).toFixed(0)}KB (${savings}% smaller)`);
-      
+
     } catch (error) {
       console.warn(`⚠️  Could not optimize ${relativePath}:`, error.message);
     }

@@ -102,7 +102,6 @@ function initWordArt() {
         if (allowWordArtSpam) {
           runMonsoon(displayText, window.innerWidth);
         } else {
-          showWordArt(displayText, e.clientX, e.clientY);
           clickCount++;
           if (clickCount === CONFIG.hintClicks) showHint();
         }

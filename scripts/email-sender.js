@@ -1,9 +1,13 @@
 // Simplified and safer email-sender.js
-require('dotenv').config();
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
+// Load .env from project root (parent of scripts/)
+require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+
 const nodemailer = require('nodemailer');
 const { SocksProxyAgent } = require('socks-proxy-agent');
+
+const CONNECT_TIMEOUT_MS = 25000; // fail after 25s instead of hanging
 
 class EmailSender {
   constructor() {
@@ -14,6 +18,12 @@ class EmailSender {
   createGmailTransporter() {
     const smtpUser = process.env.SMTP_USER || process.env.GMAIL_USER;
     let smtpPass = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD;
+
+    // Debug: confirm env vars are loaded (never log actual values)
+    const userSet = !!smtpUser;
+    const passSet = !!smtpPass;
+    const passLen = smtpPass ? String(smtpPass).replace(/\s+/g, '').length : 0;
+    console.log(`Credentials: GMAIL_USER/SMTP_USER ${userSet ? 'set' : 'MISSING'}, GMAIL_APP_PASSWORD/SMTP_PASS ${passSet ? 'set (length ' + passLen + ')' : 'MISSING'}. App passwords are 16 characters.`);
 
     if (!smtpUser || !smtpPass) {
       throw new Error('Missing SMTP credentials. Set SMTP_USER/SMTP_PASS or GMAIL_USER/GMAIL_APP_PASSWORD.');
@@ -39,9 +49,9 @@ class EmailSender {
       secure: smtpSecure,
       auth: { user: smtpUser, pass: smtpPass },
       pool: false,
-      connectionTimeout: 60000,
-      greetingTimeout: 30000,
-      socketTimeout: 120000,
+      connectionTimeout: CONNECT_TIMEOUT_MS,
+      greetingTimeout: 15000,
+      socketTimeout: 60000,
       logger: enableDebug,
       debug: enableDebug,
       tls: {
@@ -120,19 +130,40 @@ class EmailSender {
   }
 
   async sendToOne(transporter, recipient, emailFile, subject) {
-    // Verify connection before sending
-    await transporter.verify();
-    console.log('✅ SMTP connection verified');
-    
+    const skipVerify = process.env.SKIP_VERIFY === 'true';
+    if (!skipVerify) {
+      console.log('Connecting to SMTP server... (set SKIP_VERIFY=true to skip)');
+      try {
+        await Promise.race([
+          transporter.verify(),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Connection timed out after 25s. Check network/firewall or set SKIP_VERIFY=true to try sending anyway.')), CONNECT_TIMEOUT_MS)
+          )
+        ]);
+      } catch (err) {
+        console.error('Verify failed:', err.message);
+        if (err.code === 'EAUTH') throw err;
+        console.log('Tip: Run with SKIP_VERIFY=true to attempt send without verify.');
+        throw err;
+      }
+      console.log('✅ SMTP connection verified');
+    } else {
+      console.log('Skipping SMTP verify (SKIP_VERIFY=true).');
+    }
+
+    console.log('Loading email content and attachments...');
     const html = this.loadEmailContent(emailFile);
     const attachments = this.prepareAttachments(this.loadImageManifest(emailFile));
+    const totalMB = (attachments.reduce((s, a) => s + (fs.existsSync(a.path) ? fs.statSync(a.path).size : 0), 0) / 1024 / 1024).toFixed(2);
+    console.log(`  ${attachments.length} attachments (${totalMB} MB)`);
     
     // Size sanity check
     const approxSize = attachments.reduce((s, a) => s + (fs.existsSync(a.path) ? fs.statSync(a.path).size : 0), 0);
     if (approxSize > 20 * 1024 * 1024) {
       console.warn(`⚠️ Email size is ${(approxSize / 1024 / 1024).toFixed(1)}MB. Consider fewer/lighter images.`);
     }
-    
+
+    console.log('Sending email...');
     const result = await this.send(transporter, {
       to: recipient,
       subject,
@@ -159,10 +190,14 @@ class EmailSender {
   const [_, __, emailFile, subject = 'Michael\'s Travel Newsletter', recipient] = process.argv;
   if (!emailFile) return console.error('❌ Please specify an email file.');
 
+  console.log('Creating transporter...');
   const transporter = sender.createGmailTransporter();
   if (recipient) {
     await sender.sendToOne(transporter, recipient, emailFile, subject);
   } else {
     await sender.confirmAndSendAll(transporter, emailFile, subject);
   }
-})();
+})().catch((err) => {
+  console.error('❌', err.message || err);
+  process.exit(1);
+});

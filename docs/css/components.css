@@ -186,6 +186,17 @@ footer .icon-group a:hover img {
   margin-bottom: 0;
 }
 
+.image-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.image-group .image-container {
+  margin-bottom: 0;
+}
+
 .image-container img {
   width: 100%;
   height: auto;
@@ -197,6 +208,11 @@ footer .icon-group a:hover img {
 
 .image-container:hover img {
   transform: scale(1.05);
+}
+
+/* Shift crop window up to show more of top (e.g. 25% from top centered in frame) */
+.image-container.crop-high img {
+  object-position: center 25%;
 }
 
 /* Back to map button */
@@ -279,7 +295,8 @@ footer .icon-group a:hover img {
 
 /* Mobile responsive */
 @media (max-width: 768px) {
-  .image-grid {
+  .image-grid,
+  .image-group {
     grid-template-columns: 1fr;
   }
   

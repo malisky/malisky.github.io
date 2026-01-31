@@ -218,5 +218,25 @@
     "location": { "lat": 39.14222, "lng": 117.17667 },
     "location_name": "Ancient Culture Street, Tianjin, China",
     "countryGroup": "China"
+  },
+  {
+    "id": "yangshuo-dujiangyan",
+    "title": "January 30, 2026: Sojourn in Sichuan (and Chongqing and Yangshuo)",
+    "date": "2026-01-30",
+    "image": "/images-optimized/yangshuo/yangshuo-cover-h.webp",
+    "link": "/newsletter/yangshuo.html",
+    "location": { "lat": 31.0086, "lng": 103.6052 },
+    "location_name": "Dujiangyan Panda Base, Sichuan, China",
+    "countryGroup": "China"
+  },
+  {
+    "id": "yangshuo-xingping",
+    "title": "January 30, 2026: Sojourn in Sichuan (and Chongqing and Yangshuo)",
+    "date": "2026-01-30",
+    "image": "/images-optimized/yangshuo/yangshuo-cover-h.webp",
+    "link": "/newsletter/yangshuo.html",
+    "location": { "lat": 24.7782, "lng": 110.4966 },
+    "location_name": "Xingping Village, Yangshuo, China",
+    "countryGroup": "China"
   }
 ]
