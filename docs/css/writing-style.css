@@ -1,7 +1,7 @@
-/* Research page specific styles - completely separate system */
+/* Writing page specific styles - completely separate system */
 
-/* Research list positioning */
-.research-list {
+/* Writing list positioning */
+.writing-list {
   margin-top: -1rem;
   max-width: 800px;
   margin-left: auto;
@@ -9,8 +9,8 @@
   display: block;
 }
 
-/* Research items */
-.research-item {
+/* Writing items */
+.writing-item {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
   border-radius: 12px;
@@ -22,25 +22,25 @@
   position: relative;
 }
 
-.research-item:hover {
+.writing-item:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Research link */
-.research-link {
+/* Writing link */
+.writing-link {
   text-decoration: none;
   color: inherit;
   display: block;
 }
 
-/* Research content */
-.research-content {
+/* Writing content */
+.writing-content {
   font-size: 1.1rem;
   line-height: 1.5;
   margin-bottom: 0.5rem;
 }
 
-.research-item:hover {
+.writing-item:hover {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
   transition: box-shadow 0.2s ease, transform 0.2s ease;

@@ -28,11 +28,11 @@ function createStickyNavigation() {
   
   // Set paths based on page type
   const homePath = isNewsletterPage ? '/' : '/';
-  const researchPath = isNewsletterPage ? '../research.html' : 'research.html';
+  const writingPath = isNewsletterPage ? '../writing.html' : 'writing.html';
 
   // Set text based on language
   const homeText = isChinesePage ? '首页' : 'Home';
-  const researchText = isChinesePage ? '研究' : 'Research';
+  const writingText = isChinesePage ? '写作' : 'Writing';
   const backToKazakhstanText = isChinesePage ? '返回哈萨克斯坦' : 'Back to Kazakhstan';
   const darkModeTitle = isChinesePage ? '切换深色模式' : 'Toggle dark mode';
 
@@ -41,7 +41,7 @@ function createStickyNavigation() {
   
   let navHTML = `
     <a href="${homePath}">${homeText}</a>
-    <a href="${researchPath}">${researchText}</a>
+    <a href="${writingPath}">${writingText}</a>
   `;
   
   // Add Kazakhstan back tab if it's a Kazakhstan newsletter

@@ -46,7 +46,7 @@ function initActiveNavLinks() {
     if (
       linkPath === currentPath ||
       (currentPath.includes('/newsletter/') && linkPath === '/newsletter.html') ||
-      (currentPath.includes('/research/') && linkPath === '/research.html')
+      (currentPath === '/writing.html' || currentPath.endsWith('/writing.html'))
     ) {
       link.classList.add('active');
     } else {
