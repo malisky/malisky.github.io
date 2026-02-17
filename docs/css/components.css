@@ -215,6 +215,12 @@ footer .icon-group a:hover img {
   object-position: center 25%;
 }
 
+/* Show full height for tall/portrait images (no crop, more verticality) */
+.image-container.show-full-height img {
+  object-fit: contain;
+  max-height: min(900px, 85vh);
+}
+
 /* Back to map button */
 .back-to-map {
   display: flex;
