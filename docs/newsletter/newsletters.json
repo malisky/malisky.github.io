@@ -1,11 +1,27 @@
 [
   {
+    "id": "kazakhstan",
+    "title": "Kazakhstan Dispatches",
+    "date": "2024-08-04",
+    "image": "/images-optimized/kz-lake/lake1.webp",
+    "link": "/newsletter/kazakhstan.html",
+    "location": {
+      "lat": 43.2567,
+      "lng": 76.9286
+    },
+    "location_name": "Almaty, Kazakhstan",
+    "countryGroup": "Kazakhstan"
+  },
+  {
     "id": "baden",
     "title": "October 4: Baden Backroads",
     "date": "2024-10-04",
     "image": "/images-optimized/baden/baden1.webp",
     "link": "/newsletter/baden.html",
-    "location": { "lat": 48.0064, "lng": 16.2308 },
+    "location": {
+      "lat": 48.0064,
+      "lng": 16.2308
+    },
     "location_name": "Baden bei Wien, Austria",
     "countryGroup": "Austria"
   },
@@ -15,7 +31,10 @@
     "date": "2024-10-14",
     "image": "/images-optimized/budapest/budapest.webp",
     "link": "/newsletter/budapest.html",
-    "location": { "lat": 47.4979, "lng": 19.0402 },
+    "location": {
+      "lat": 47.4979,
+      "lng": 19.0402
+    },
     "location_name": "Budapest, Hungary",
     "countryGroup": "Hungary"
   },
@@ -25,7 +44,10 @@
     "date": "2024-10-22",
     "image": "/images-optimized/turkey/turkey.webp",
     "link": "/newsletter/turkey.html",
-    "location": { "lat": 41.0151, "lng": 28.9795 },
+    "location": {
+      "lat": 41.0151,
+      "lng": 28.9795
+    },
     "location_name": "Istanbul, Turkey",
     "countryGroup": "Turkey"
   },
@@ -35,7 +57,10 @@
     "date": "2024-10-28",
     "image": "/images-optimized/wachau/wachau.webp",
     "link": "/newsletter/wachau.html",
-    "location": { "lat": 48.3585, "lng": 15.431 },
+    "location": {
+      "lat": 48.3585,
+      "lng": 15.431
+    },
     "location_name": "Wachau Valley, Austria",
     "countryGroup": "Austria"
   },
@@ -45,7 +70,10 @@
     "date": "2024-11-05",
     "image": "/images-optimized/slovenia/lake-bled.webp",
     "link": "/newsletter/slovenia.html",
-    "location": { "lat": 46.0569, "lng": 14.5058 },
+    "location": {
+      "lat": 46.0569,
+      "lng": 14.5058
+    },
     "location_name": "Ljubljana, Slovenia",
     "countryGroup": "Slovenia"
   },
@@ -55,7 +83,10 @@
     "date": "2024-11-25",
     "image": "/images-optimized/november/brno-overlook.webp",
     "link": "/newsletter/november.html",
-    "location": { "lat": 49.1951, "lng": 16.6068 },
+    "location": {
+      "lat": 49.1951,
+      "lng": 16.6068
+    },
     "location_name": "Brno, Czech Republic",
     "countryGroup": "Czech Republic"
   },
@@ -65,7 +96,10 @@
     "date": "2024-12-04",
     "image": "/images-optimized/georgia/cave-monastery.webp",
     "link": "/newsletter/georgia.html",
-    "location": { "lat": 41.6941, "lng": 44.8337 },
+    "location": {
+      "lat": 41.6941,
+      "lng": 44.8337
+    },
     "location_name": "Tbilisi, Georgia",
     "countryGroup": "Georgia"
   },
@@ -75,7 +109,10 @@
     "date": "2024-12-24",
     "image": "/images-optimized/spain/alhambra.webp",
     "link": "/newsletter/spain.html",
-    "location": { "lat": 37.3925, "lng": -5.9941 },
+    "location": {
+      "lat": 37.3925,
+      "lng": -5.9941
+    },
     "location_name": "Seville, Spain",
     "countryGroup": "Spain"
   },
@@ -85,7 +122,10 @@
     "date": "2025-03-27",
     "image": "/images-optimized/mongolia/camel.webp",
     "link": "/newsletter/mongolia.html",
-    "location": { "lat": 47.9212, "lng": 106.9186 },
+    "location": {
+      "lat": 47.9212,
+      "lng": 106.9186
+    },
     "location_name": "Ulaanbaatar, Mongolia",
     "countryGroup": "Mongolia"
   },
@@ -95,19 +135,12 @@
     "date": "2025-04-03",
     "image": "/images-optimized/taiwan/zhishan.webp",
     "link": "/newsletter/taiwan.html",
-    "location": { "lat": 25.033, "lng": 121.5645 },
+    "location": {
+      "lat": 25.033,
+      "lng": 121.5645
+    },
     "location_name": "Taipei, Taiwan",
     "countryGroup": "Taiwan"
-  },
-  {
-    "id": "kazakhstan",
-    "title": "Kazakhstan Dispatches",
-    "date": "2024-08-04",
-    "image": "/images-optimized/kz-lake/lake1.webp",
-    "link": "/newsletter/kazakhstan.html",
-    "location": { "lat": 43.2567, "lng": 76.9286 },
-    "location_name": "Almaty, Kazakhstan",
-    "countryGroup": "Kazakhstan"
   },
   {
     "id": "graduation",
@@ -115,7 +148,10 @@
     "date": "2025-06-17",
     "image": "/images-optimized/graduation/graduation-1.webp",
     "link": "/newsletter/graduation.html",
-    "location": { "lat": 22.2831, "lng": 114.1366 },
+    "location": {
+      "lat": 22.2831,
+      "lng": 114.1366
+    },
     "location_name": "Pokfulam, Hong Kong",
     "countryGroup": "China"
   },
@@ -125,7 +161,10 @@
     "date": "2025-06-18",
     "image": "/images-optimized/yiwu/yiwu.webp",
     "link": "/newsletter/yiwu.html",
-    "location": { "lat": 29.3152, "lng": 120.0768 },
+    "location": {
+      "lat": 29.3152,
+      "lng": 120.0768
+    },
     "location_name": "Yiwu, China",
     "countryGroup": "China"
   },
@@ -135,7 +174,10 @@
     "date": "2025-06-22",
     "image": "/images-optimized/hangzhou/xihu.webp",
     "link": "/newsletter/hangzhou.html",
-    "location": { "lat": 30.2741, "lng": 120.1551 },
+    "location": {
+      "lat": 30.2741,
+      "lng": 120.1551
+    },
     "location_name": "Hangzhou, China",
     "countryGroup": "China"
   },
@@ -145,7 +187,10 @@
     "date": "2025-06-26",
     "image": "/images-optimized/dandelion/dandelion-school.webp",
     "link": "/newsletter/dandelion.html",
-    "location": { "lat": 39.9042, "lng": 116.4074 },
+    "location": {
+      "lat": 39.9042,
+      "lng": 116.4074
+    },
     "location_name": "Beijing, China",
     "countryGroup": "China"
   },
@@ -155,7 +200,10 @@
     "date": "2025-07-02",
     "image": "/images-optimized/kashgar/pamir-plateau-h.webp",
     "link": "/newsletter/kashgar.html",
-    "location": { "lat": 36.97374, "lng": 75.2973 },
+    "location": {
+      "lat": 36.97374,
+      "lng": 75.2973
+    },
     "location_name": "Khunjerab Pass, China",
     "countryGroup": "China"
   },
@@ -165,7 +213,10 @@
     "date": "2025-07-06",
     "image": "/images-optimized/turpan/desert.webp",
     "link": "/newsletter/turpan.html",
-    "location": { "lat": 42.9476, "lng": 89.1783 },
+    "location": {
+      "lat": 42.9476,
+      "lng": 89.1783
+    },
     "location_name": "Jiaohe Ruins, Turpan, China",
     "countryGroup": "China"
   },
@@ -175,7 +226,10 @@
     "date": "2025-07-09",
     "image": "/images-optimized/ili/ili-lavenders.webp",
     "link": "/newsletter/ili.html",
-    "location": { "lat": 44.056, "lng": 80.879 },
+    "location": {
+      "lat": 44.056,
+      "lng": 80.879
+    },
     "location_name": "Lavender Fields Ruins, Huocheng, China",
     "countryGroup": "China"
   },
@@ -185,7 +239,10 @@
     "date": "2025-07-22",
     "image": "/images-optimized/shaolin/shaolin.webp",
     "link": "/newsletter/shaolin.html",
-    "location": { "lat": 34.500, "lng": 112.909 },
+    "location": {
+      "lat": 34.5,
+      "lng": 112.909
+    },
     "location_name": "Shaolin Temple, Henan, China",
     "countryGroup": "China"
   },
@@ -195,7 +252,10 @@
     "date": "2025-10-08",
     "image": "/images-optimized/ningxia/xumishan-buddha.webp",
     "link": "/newsletter/ningxia.html",
-    "location": { "lat": 36.28062, "lng": 105.98154 },
+    "location": {
+      "lat": 36.28062,
+      "lng": 105.98154
+    },
     "location_name": "Xumishan Grottoes, Ningxia, China",
     "countryGroup": "China"
   },
@@ -205,7 +265,10 @@
     "date": "2025-10-30",
     "image": "/images-optimized/emeishan/emeishan-cover.webp",
     "link": "/newsletter/emeishan.html",
-    "location": { "lat": 29.5269, "lng": 103.3364 },
+    "location": {
+      "lat": 29.5269,
+      "lng": 103.3364
+    },
     "location_name": "Mount Emei (Emeishan), Sichuan, China",
     "countryGroup": "China"
   },
@@ -215,7 +278,10 @@
     "date": "2025-11-27",
     "image": "/images-optimized/clayman/tianjin-cover.webp",
     "link": "/newsletter/clayman.html",
-    "location": { "lat": 39.14222, "lng": 117.17667 },
+    "location": {
+      "lat": 39.14222,
+      "lng": 117.17667
+    },
     "location_name": "Ancient Culture Street, Tianjin, China",
     "countryGroup": "China"
   },
@@ -225,7 +291,10 @@
     "date": "2026-01-30",
     "image": "/images-optimized/yangshuo/yangshuo-cover-h.webp",
     "link": "/newsletter/yangshuo.html",
-    "location": { "lat": 31.0086, "lng": 103.6052 },
+    "location": {
+      "lat": 31.0086,
+      "lng": 103.6052
+    },
     "location_name": "Dujiangyan Panda Base, Sichuan, China",
     "countryGroup": "China"
   },
@@ -235,8 +304,24 @@
     "date": "2026-01-30",
     "image": "/images-optimized/yangshuo/yangshuo-cover-h.webp",
     "link": "/newsletter/yangshuo.html",
-    "location": { "lat": 24.7782, "lng": 110.4966 },
+    "location": {
+      "lat": 24.7782,
+      "lng": 110.4966
+    },
     "location_name": "Xingping Village, Yangshuo, China",
     "countryGroup": "China"
+  },
+  {
+    "id": "cambodia",
+    "title": "February 17, 2026: Cambodia",
+    "date": "2026-02-17",
+    "image": "/images-optimized/cambodia/salt-fields(h).webp",
+    "link": "/newsletter/cambodia.html",
+    "location": {
+      "lat": 13.4125,
+      "lng": 103.867
+    },
+    "location_name": "Angkor Wat, Cambodia",
+    "countryGroup": "Cambodia"
   }
 ]
