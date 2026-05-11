@@ -323,5 +323,31 @@
     },
     "location_name": "Angkor Wat, Cambodia",
     "countryGroup": "Cambodia"
+  },
+  {
+    "id": "dongbei",
+    "title": "March 14, 2026: A Few Days in Dongbei",
+    "date": "2026-03-14",
+    "image": "/images-optimized/dongbei/angang.webp",
+    "link": "/newsletter/dongbei.html",
+    "location": {
+      "lat": 41.1086,
+      "lng": 122.9946
+    },
+    "location_name": "Anshan, Liaoning, China",
+    "countryGroup": "China"
+  },
+  {
+    "id": "yunnan-pt1",
+    "title": "April 22, 2026: Yunnan, part 1",
+    "date": "2026-04-22",
+    "image": "/images-optimized/yunnan-pt1/yunnan-cover.webp",
+    "link": "/newsletter/yunnan-pt1.html",
+    "location": {
+      "lat": 26.8721,
+      "lng": 100.2283
+    },
+    "location_name": "Lijiang, Yunnan, China",
+    "countryGroup": "China"
   }
 ]
